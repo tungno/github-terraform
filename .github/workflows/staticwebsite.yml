@@ -7,7 +7,7 @@ on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
     paths:
-      - 'github-terraform/module06/staticwebsite/**'
+      - 'module06/staticwebsite/**'
 
 
 
@@ -24,7 +24,7 @@ jobs:
       ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-      WORKING_DIR: ./github-terraform/module06/staticwebsite
+      WORKING_DIR: ./module06/staticwebsite
       
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -42,14 +42,7 @@ jobs:
         run: terraform plan
         working-directory: ${{ env.WORKING_DIR }} 
                     
-      - name: 'Check last commit message'
-        id: commit
-        run: echo "::set-output name=message::$(git log --format=%B -n 1)"
-      - name: 'Conditionally run Terraform action'
-        run: |
-          if [[ "${{ steps.commit.outputs.message }}" == *"destroy"* ]]; then
-            terraform destroy -auto-approve
-          else
-            terraform apply -auto-approve
-          fi
-        working-directory: ${{ env.WORKING_DIR }} 
+      - name: 'Terraform apply'
+        id: apply
+        run: terraform apply -auto-approve
+        working-directory: ${{ env.WORKING_DIR }}
