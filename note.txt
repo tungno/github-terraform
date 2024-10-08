@@ -62,3 +62,6 @@ jobs:
         if: github.event.inputs.action_type == 'destroy'
         run: terraform destroy -auto-approve
         working-directiory: ${{ env.WORKING_DIR }}
+
+
+terraform workspace list 
